@@ -44,7 +44,7 @@ server:
   harden-dnssec-stripped: yes
   harden-referral-path: yes
   use-caps-for-id: yes
-  harden-algo-downgrade: yes
+  harden-algo-downgrade: no
   qname-minimisation: yes
   aggressive-nsec: yes
   rrset-roundrobin: yes
