@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Check if the system package manager is apt, dnf, yum, xbps, pacman, or zypper
+echo "Attempting to install unbound"
 if [ "$(command -v apt)" ]; then
   # Use apt to install unbound
   sudo apt install unbound
@@ -21,11 +22,12 @@ elif [ "$(command -v zypper)" ]; then
   sudo zypper install unbound
 else
   # If no package manager is detected, print an error message
-  echo "Error: No package manager detected."
+  echo "Error: No known manager detected."
 fi
 
 # Check if the directory /etc/unbound/unbound.conf.d/ exists
 if [ -d /etc/unbound/unbound.conf.d/ ]; then
+echo "Unbound installed, copying config file"
 sudo cat <<'EOT' >> /etc/unbound/unbound.conf.d/config.conf
 server:
   interface: 127.0.0.1
@@ -83,6 +85,7 @@ server:
 
 EOT
 
+echo "Config copied, attempting to restart service"
 # Check if the system uses sysvinit
 if [ -f /etc/init.d/unbound ]; then
   sudo /etc/init.d/unbound restart
@@ -98,7 +101,7 @@ elif [ -f /etc/init.d/openrc ]; then
 # Check if the system uses runit
 elif [ -f /etc/service/unbound/run ]; then
   sudo sv restart unbound
-
+echo "unbound service restarted"
 # If no known init system is detected, print an error message
 else
   echo "Error: Unknown init system, manually restart unbound"
